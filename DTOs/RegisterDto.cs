@@ -25,6 +25,6 @@ namespace RaceDay_api.DTOs
         public string Comfirmpassword { get; set; } = string.Empty;
 
         [Required]
-        public string PhonuNUmber { get; set; } = string.Empty;
+        public string PhoneNUmber { get; set; } = string.Empty;
     }
 }

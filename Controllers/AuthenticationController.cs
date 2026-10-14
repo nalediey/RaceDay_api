@@ -52,7 +52,7 @@ namespace RaceDay_api.Controllers
                 // HASH THE PASSWORD 
                 password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 role = role,
-                PhonuNUmber = dto.PhonuNUmber
+                PhoneNUmber = dto.PhoneNUmber
             };
 
             _context.Users.Add(user);
