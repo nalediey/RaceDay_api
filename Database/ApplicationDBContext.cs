@@ -11,7 +11,8 @@ namespace RaceDay_api.Database
           : base(options)
         {
         }
-
+        public DbSet<Enrolment> Enrolments { get; set; }
+        public DbSet<Results> results { get; set; }
         public DbSet<RegisterUser> Users { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Category> Categories { get; set; }

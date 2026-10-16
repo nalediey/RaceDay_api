@@ -2,21 +2,24 @@
 
 namespace RaceDay_api.Models
 {
-    public class Enrollments
+    public class Enrolment
     {
-        [Key]
         public int EnrolmentID { get; set; }
-        [Required]
+
         public int ParticipantID { get; set; }
-        [Required]
         public int CategoryID { get; set; }
-        [Required]
-        public int EntryDate { get; set; }
-        [Required]
-        public string Status { get; set; } = string.Empty;
+
+        public DateTime EntryDate { get; set; } = DateTime.UtcNow;
+
+        public string Status { get; set; } = "Registered";
+
+        public RegisterUser? Participant { get; set; }
+        public Category? Category { get; set; }
+
+        public Results? Result { get; set; }
     }
-     
-    
+
+
 }
        
    
