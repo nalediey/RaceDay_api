@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit_testing_api", "..\unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Test", "..\API_Test\API_Test.csproj", "{F6E23960-17E4-4576-955A-AC5FE17A4DA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceDay_MVC", "..\RaceDay_MVC\RaceDay_MVC.csproj", "{C514BF6A-D540-9DAC-88AF-CEC94A976CF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F6E23960-17E4-4576-955A-AC5FE17A4DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6E23960-17E4-4576-955A-AC5FE17A4DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6E23960-17E4-4576-955A-AC5FE17A4DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C514BF6A-D540-9DAC-88AF-CEC94A976CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C514BF6A-D540-9DAC-88AF-CEC94A976CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C514BF6A-D540-9DAC-88AF-CEC94A976CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C514BF6A-D540-9DAC-88AF-CEC94A976CF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
