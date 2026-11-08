@@ -17,7 +17,7 @@ namespace RaceDay_api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        private readonly IConfiguration _configuration; // Inject configuration for JWT
+        private readonly IConfiguration _configuration; 
 
         public AuthenticationController(ApplicationDBContext context, IConfiguration configuration)
         {
