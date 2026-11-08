@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDay_api.Database;
@@ -14,10 +13,12 @@ namespace RaceDay_api.Controllers
     public class EventsController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+        private readonly IWebHostEnvironment _env; // Added for image saving
 
-        public EventsController(ApplicationDBContext context)
+        public EventsController(ApplicationDBContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: api/events
@@ -41,16 +42,34 @@ namespace RaceDay_api.Controllers
         // POST: api/events
         [HttpPost]
         [Authorize(Roles = "Organiser")]
-        public async Task<ActionResult<Event>> CreateEvent([FromBody] CreateEventDto dto)
+        public async Task<ActionResult<Event>> CreateEvent([FromForm] CreateEventDto dto) // Changed to FromForm
         {
-            // Safely get the logged-in user's ID from JWT
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdString, out int organiserId))
             {
                 return Unauthorized("Invalid token.");
             }
 
-            // Map the DTO to the actual Database Model
+            string imageUrl = null;
+
+            // Handle the file upload
+            if (dto.BannerImage != null && dto.BannerImage.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "images");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + dto.BannerImage.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.BannerImage.CopyToAsync(stream);
+                }
+
+                imageUrl = $"/images/{uniqueFileName}";
+            }
+
             var newEvent = new Event
             {
                 Name = dto.Name,
@@ -59,7 +78,8 @@ namespace RaceDay_api.Controllers
                 Location = dto.Location,
                 Distance = dto.Distance,
                 EventType = dto.EventType,
-                OrganiserId = organiserId
+                OrganiserId = organiserId,
+                BannerImageUrl = imageUrl // Save the URL to the DB
             };
 
             _context.Events.Add(newEvent);
@@ -73,22 +93,18 @@ namespace RaceDay_api.Controllers
         [Authorize(Roles = "Organiser")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] UpdateEventDto dto)
         {
-            // Safely get the logged-in user's ID
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdString, out int organiserId))
             {
                 return Unauthorized("Invalid token.");
             }
 
-            //Find the existing event
             var existingEvent = await _context.Events.FindAsync(id);
 
-            //Check if it exists AND if they own it
             if (existingEvent == null) return NotFound();
             if (existingEvent.OrganiserId != organiserId)
                 return Forbid("You can only edit your own events.");
 
-            //Update only the allowed fields
             existingEvent.Name = dto.Name;
             existingEvent.Description = dto.Description;
             existingEvent.Date = dto.Date;
@@ -120,7 +136,7 @@ namespace RaceDay_api.Controllers
             _context.Events.Remove(@event);
             await _context.SaveChangesAsync();
 
-            return NoContent(); 
+            return NoContent();
         }
     }
 }

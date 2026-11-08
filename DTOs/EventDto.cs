@@ -9,6 +9,8 @@
         public string Location { get; set; }
         public string Distance { get; set; }
         public string EventType { get; set; } // e.g., "run", "walk", "cycle"
+
+        public IFormFile? BannerImage { get; set; }
     }
 
     // Used for PUT /api/events/{id}

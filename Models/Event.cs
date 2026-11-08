@@ -15,5 +15,8 @@
         public RegisterUser Organiser { get; set; } = null!;
 
         public ICollection<Category> Categories { get; set; } = new List<Category>();
+
+
+        public string? BannerImageUrl { get; set; }
     }
 }
