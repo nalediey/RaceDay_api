@@ -1,0 +1,50 @@
+name: .NET CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore RaceDay_api.sln
+
+      - name: Build solution
+        run: dotnet build RaceDay_api.sln --configuration Release --no-restore
+
+      - name: Run tests if a test project exists
+        shell: bash
+        run: |
+          if find . -name "*Test*.csproj" -o -name "*.Tests.csproj" | grep -q .; then
+            dotnet test RaceDay_api.sln --configuration Release --no-build --verbosity normal
+          else
+            echo "No test project found. Skipping test step."
+          fi
+
+      - name: Publish app
+        run: dotnet publish RaceDay_api.csproj --configuration Release --no-build --output ./publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: raceday-api-${{ github.sha }}
+          path: ./publish
+          if-no-files-found: error
+          retention-days: 14
