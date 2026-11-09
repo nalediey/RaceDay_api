@@ -1,4 +1,4 @@
-Welcome to my api pro project
+Welcome to my api project
 # RaceDay API
 
 RaceDay API is the ASP.NET Core MVC web application for the RaceDay event platform. It provides a browser-based interface for account registration and sign-in, race-event pages, and organiser and participant areas. The MVC app communicates with the RaceDay API over HTTP.
